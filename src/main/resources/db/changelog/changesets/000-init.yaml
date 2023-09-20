@@ -1,0 +1,218 @@
+databaseChangeLog:
+  - changeSet:
+      id: 000-1
+      author: Sanjar
+      changes:
+        - createTable:
+            tableName: city
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 000-2
+      author: Sanjar
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  defaultValueComputed: 'gen_random_uuid()'
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: city_id
+                  type: int4
+                  constraints:
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(256)
+              - column:
+                  name: last_name
+                  type: varchar(256)
+              - column:
+                  name: middle_name
+                  type: varchar(256)
+              - column:
+                  name: gender
+                  type: int2
+              - column:
+                  name: birthdate
+                  type: date
+              - column:
+                  name: avatar_url
+                  type: varchar(256)
+              - column:
+                  name: description
+                  type: varchar(256)
+              - column:
+                  name: email
+                  type: varchar(256)
+              - column:
+                  name: phone
+                  type: varchar(20)
+            constraints:
+              primaryKey:
+                columnNames:
+                  - id
+
+  - changeSet:
+      id: 000-3
+      author: Sanjar
+      changes:
+        - createIndex:
+            tableName: user
+            columns:
+              - column:
+                  name: username
+            unique: true
+
+  - changeSet:
+      id: 000-4
+      author: Sanjar
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user
+            baseColumnNames:
+              - city_id
+            constraintName: user_city_id_fkey
+            referencedTableName: city
+            referencedColumnNames:
+              - id
+            onDelete: RESTRICT
+
+  - changeSet:
+      id: 000-5
+      author: Sanjar
+      changes:
+        - createTable:
+            tableName: user_subscribe
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: s_user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+            constraints:
+              primaryKey:
+                columnNames:
+                  - user_id
+                  - s_user_id
+
+  - changeSet:
+      id: 000-6
+      author: Sanjar
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user_subscribe
+            baseColumnNames:
+              - user_id
+            constraintName: user_subscribe_user_id_fkey
+            referencedTableName: user
+            referencedColumnNames:
+              - id
+            onDelete: RESTRICT
+
+  - changeSet:
+      id: 000-7
+      author: Sanjar
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user_subscribe
+            baseColumnNames:
+              - s_user_id
+            constraintName: user_subscribe_s_user_id_fkey
+            referencedTableName: user
+            referencedColumnNames:
+              - id
+            onDelete: RESTRICT
+
+  - changeSet:
+      id: 000-8
+      author: Sanjar
+      changes:
+        - createTable:
+            tableName: hard_skill
+            columns:
+              - column:
+                  name: id
+                  type: serial
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(256)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 000-9
+      author: Sanjar
+      changes:
+        - createTable:
+            tableName: user_hard_skill
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: hard_skill_id
+                  type: int4
+                  constraints:
+                    nullable: false
+            constraints:
+              primaryKey:
+                columnNames:
+                  - user_id
+                  - hard_skill_id
+
+  - changeSet:
+      id: 000-10
+      author: Sanjar
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user_hard_skill
+            baseColumnNames:
+              - user_id
+            constraintName: user_hard_skill_user_id_fkey
+            referencedTableName: user
+            referencedColumnNames:
+              - id
+            onDelete: RESTRICT
+
+  - changeSet:
+      id: 000-11
+      author: Sanjar
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user_hard_skill
+            baseColumnNames:
+              - hard_skill_id
+            constraintName: user_hard_skill_hard_skill_id_fkey
+            referencedTableName: hard_skill
+            referencedColumnNames:
+              - id
+            onDelete: RESTRICT
